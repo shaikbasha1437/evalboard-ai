@@ -1,0 +1,32 @@
+name: EvalBoard eval gate
+description: Run an EvalBoard eval config (mock model by default) and fail the job if the pass rate is under the threshold or regresses against the baseline.
+author: shaikbasha1437
+branding:
+  icon: check-circle
+  color: green
+inputs:
+  config:
+    description: Path to the eval config JSON (relative to the workspace).
+    required: true
+  out_dir:
+    description: Where to write report.json and report.md.
+    required: false
+    default: evalboard-report
+  mock:
+    description: "'true' forces every config onto the deterministic mock model, so no key is needed and nothing is sent."
+    required: false
+    default: 'true'
+  fail_on_gate:
+    description: "'false' reports a failed gate without failing the step."
+    required: false
+    default: 'true'
+outputs:
+  passed:
+    description: "'true' when the gate passed."
+  report_json:
+    description: Path to report.json.
+  report_md:
+    description: Path to report.md.
+runs:
+  using: node24
+  main: index.js

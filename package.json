@@ -1,0 +1,9 @@
+{
+  "name": "evalboard-ai",
+  "version": "1.0.0",
+  "description": "An eval dashboard for LLM apps: datasets, side-by-side runs, scorers, accuracy vs cost vs latency, regressions and a CI gate. Runs in the browser.",
+  "private": true,
+  "license": "MIT",
+  "bin": { "evalboard": "cli/evalboard.js" },
+  "scripts": { "test": "node --test test/*.test.js", "eval": "node cli/evalboard.js examples/support-eval.json" }
+}

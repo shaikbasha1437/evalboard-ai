@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EvalBoard AI: an eval dashboard for accuracy, cost and latency</title>
+  <meta name="description" content="Run test-case datasets against several model configs side by side. Score outputs with exact, JSON, SQL, grounding, safety, LLM-as-judge and custom scorers, and compare accuracy, cost and latency with confidence intervals, Pareto frontiers and regression tests. Runs in your browser; demo mode needs no key.">
+  <meta name="theme-color" content="#16202e">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+  <script>try { var t = localStorage.getItem('eb.theme'); if (t ? JSON.parse(t) === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches) document.documentElement.classList.add('dark'); } catch (e) {}</script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="top">
+    <a class="brand" href="./"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="3" width="26" height="26" rx="6" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M9 21l5-6 4 3 5-8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="23" cy="10" r="2.2" fill="currentColor"/></svg>EvalBoard <b>AI</b></a>
+    <nav aria-label="App">
+      <button type="button" id="nav-help">How it works</button>
+      <button type="button" id="nav-export">Export</button>
+      <button type="button" id="nav-settings">Settings</button>
+      <button type="button" id="nav-theme" aria-label="Toggle dark theme" title="Toggle dark theme">◐</button>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="hero">
+      <p class="eyebrow">THE EVAL DASHBOARD</p>
+      <h1>Know what a model change <em>costs</em> before you ship it.</h1>
+      <p class="lede">Run a dataset of test cases against several model configs side by side. EvalBoard scores every output, then puts accuracy, cost and latency on one screen with confidence intervals, a Pareto frontier and a regression test against your baseline. Click any result to see the case, each output, the scorer’s reasons and a diff.</p>
+      <div class="status-row"><span class="pill" id="mode-pill">Demo mode · no key</span><span class="pill warn">Demo numbers are simulated, not real model benchmarks</span><span class="pill ok">Keys stay in this browser</span><span class="pill">Sample prices, editable</span></div>
+    </section>
+    <section class="panel ctx" aria-label="Run">
+      <div class="ctx-row">
+        <div class="field"><label for="run-select">Run</label><select id="run-select"></select></div>
+        <div class="ctx-meta small" id="run-meta"></div>
+        <div class="ctx-actions"><button type="button" id="new-run" class="primary">+ New run</button></div>
+      </div>
+    </section>
+    <nav class="tabs" id="tabs" role="tablist" aria-label="Sections">
+      <button type="button" role="tab" data-tab="dashboard">Dashboard</button>
+      <button type="button" role="tab" data-tab="cases">Cases</button>
+      <button type="button" role="tab" data-tab="review">Review<span class="count-badge"></span></button>
+      <button type="button" role="tab" data-tab="datasets">Datasets</button>
+      <button type="button" role="tab" data-tab="configs">Configs</button>
+      <button type="button" role="tab" data-tab="run">Run</button>
+      <button type="button" role="tab" data-tab="scorers">Scorers</button>
+    </nav>
+    <section id="panel" class="tabpanel" role="tabpanel" aria-live="polite"><div class="empty">Loading…</div></section>
+    <footer class="foot small muted">EvalBoard AI is open source (MIT). Brightcart, its customers, invoices and the Atlas, Swift and Local model configs are fictional; addresses use <code>.example</code> domains. Demo results come from a deterministic mock model and are simulated, not benchmarks of any real model. Prices are an editable sample table. Your data stays in this browser; in live mode prompts go only to the provider you pick, with your own key.</footer>
+  </main>
+  <div id="modal-host"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="js/text.js"></script>
+  <script src="js/guard.js"></script>
+  <script src="js/tokens.js"></script>
+  <script src="js/prices.js"></script>
+  <script src="js/stats.js"></script>
+  <script src="js/datasets.js"></script>
+  <script src="js/scorers.js"></script>
+  <script src="js/judge.js"></script>
+  <script src="js/mock.js"></script>
+  <script src="js/runner.js"></script>
+  <script src="js/metrics.js"></script>
+  <script src="js/fixtures.js"></script>
+  <script src="js/seed.js"></script>
+  <script src="js/demo.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/report.js"></script>
+  <script src="js/custom.js"></script>
+  <script src="js/diff.js"></script>
+  <script src="js/llm.js"></script>
+  <script src="js/webllm.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/app.js"></script>
+  <script>if ('serviceWorker' in navigator && location.protocol !== 'file:') addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
+</body>
+</html>

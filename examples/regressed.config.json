@@ -1,0 +1,60 @@
+{
+  "name": "Support answers: swap Atlas-M for the cheaper Swift-S (expected to fail)",
+  "dataset": "support.jsonl",
+  "prompt": {
+    "system": "You are the Brightcart help assistant. Answer only from the context. Cite the chunk id in square brackets, like [kb-returns]. Be concise. If the context does not cover the question, say you do not know.",
+    "template": "Context:\n{{context}}\n\nQuestion: {{input}}"
+  },
+  "scorers": [
+    {
+      "id": "semantic",
+      "type": "semantic",
+      "gate": true,
+      "options": {
+        "threshold": 0.55
+      }
+    },
+    {
+      "id": "grounding",
+      "type": "grounding",
+      "gate": true,
+      "options": {
+        "requireCitation": true
+      }
+    },
+    {
+      "id": "rouge",
+      "type": "overlap",
+      "gate": false,
+      "options": {
+        "threshold": 0.4
+      }
+    }
+  ],
+  "custom": [
+    {
+      "id": "short",
+      "file": "short-answer.js",
+      "threshold": 0.5,
+      "timeoutMs": 500,
+      "gate": false
+    }
+  ],
+  "configs": [
+    {
+      "id": "cfg-atlas-m",
+      "label": "Swift-S in place of Atlas-M",
+      "provider": "mock",
+      "model": "swift-s"
+    }
+  ],
+  "concurrency": 4,
+  "retries": 3,
+  "gate": {
+    "minPassRate": 0.6,
+    "baseline": "baseline.json",
+    "alpha": 0.05,
+    "maxDrop": 0.1
+  },
+  "out": "../evalboard-report-regressed"
+}

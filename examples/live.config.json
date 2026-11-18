@@ -1,0 +1,63 @@
+{
+  "name": "Support answers: live model (needs a key)",
+  "dataset": "support.jsonl",
+  "prompt": {
+    "system": "You are the Brightcart help assistant. Answer only from the context. Cite the chunk id in square brackets, like [kb-returns]. Be concise. If the context does not cover the question, say you do not know.",
+    "template": "Context:\n{{context}}\n\nQuestion: {{input}}"
+  },
+  "scorers": [
+    {
+      "id": "semantic",
+      "type": "semantic",
+      "gate": true,
+      "options": {
+        "threshold": 0.55
+      }
+    },
+    {
+      "id": "grounding",
+      "type": "grounding",
+      "gate": true,
+      "options": {
+        "requireCitation": true
+      }
+    },
+    {
+      "id": "rouge",
+      "type": "overlap",
+      "gate": false,
+      "options": {
+        "threshold": 0.4
+      }
+    }
+  ],
+  "custom": [
+    {
+      "id": "short",
+      "file": "short-answer.js",
+      "threshold": 0.5,
+      "timeoutMs": 500,
+      "gate": false
+    }
+  ],
+  "configs": [
+    {
+      "id": "cfg-live",
+      "label": "gpt-4o-mini",
+      "provider": "openai",
+      "model": "gpt-4o-mini",
+      "keyEnv": "OPENAI_API_KEY",
+      "maxTokens": 300
+    }
+  ],
+  "concurrency": 4,
+  "retries": 3,
+  "gate": {
+    "minPassRate": 0.6,
+    "alpha": 0.05,
+    "maxDrop": 0.1
+  },
+  "out": "../evalboard-report-live",
+  "limit": 10,
+  "budgetUsd": 0.05
+}
