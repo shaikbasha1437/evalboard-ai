@@ -26,20 +26,21 @@ jobs:
         with:
           config: examples/evalboard.config.json
           out_dir: evalboard-report
-      - name: A regressed config must fail the gate
+      - name: A regressed config is reported as failed (fail_on_gate false, so this step stays green)
         id: regressed
         uses: ./action
-        continue-on-error: true
         with:
           config: examples/regressed.config.json
           out_dir: evalboard-report-regressed
-      - name: Check the regressed run was caught
+          fail_on_gate: 'false'
+      - name: Check the regressed run was caught and the CLI exits 1
         run: |
           test "${{ steps.gate.outputs.passed }}" = "true"
-          test "${{ steps.regressed.outcome }}" = "failure"
           test "${{ steps.regressed.outputs.passed }}" = "false"
           grep -q "dropped" evalboard-report-regressed/report.md
-      - uses: actions/upload-artifact@v5
+          set +e; node cli/evalboard.js examples/regressed.config.json --quiet --out /tmp/regressed > /dev/null; code=$?; set -e
+          test "$code" = "1"
+      - uses: actions/upload-artifact@v6
         if: always()
         with:
           name: evalboard-report

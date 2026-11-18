@@ -44,14 +44,14 @@
   }
   function lines(o) {
     const W = o.width || 560; const H = o.height || 240; const m = { l: 56, r: 12, t: 12, b: 40 };
-    const all = o.lines.flatMap((s) => s.points); if (!all.length) return '<p class="muted small">No runs to show yet.</p>';
+    const sets = o.lines.map((s) => Object.assign({}, s, { points: s.points.filter((p) => isFinite(p.x) && isFinite(p.y)) })); const all = sets.flatMap((s) => s.points); if (!all.length) return '<p class="muted small">No runs to show yet.</p>';
     let x0 = Math.min.apply(null, all.map((p) => p.x)); let x1 = Math.max.apply(null, all.map((p) => p.x)); if (x1 === x0) { x0 -= 86400000; x1 += 86400000; }
     const y1 = Math.max.apply(null, all.map((p) => p.y)) * 1.15 || 1; const X = (v) => m.l + ((v - x0) / (x1 - x0)) * (W - m.l - m.r); const Y = (v) => H - m.b - (v / y1) * (H - m.t - m.b);
     const yf = o.yFmt || ((v) => String(v)); const xf = o.xFmt || ((v) => new Date(v).toISOString().slice(5, 10));
     let s = '<svg class="chart" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(o.title || 'line chart') + '">';
     for (const t of ticks(0, y1, 4)) s += '<line class="grid" x1="' + m.l + '" x2="' + (W - m.r) + '" y1="' + Y(t) + '" y2="' + Y(t) + '"/><text class="tick" x="' + (m.l - 6) + '" y="' + (Y(t) + 4) + '" text-anchor="end">' + esc(yf(t)) + '</text>';
     const xs = Array.from(new Set(all.map((p) => p.x))).sort((a, b) => a - b); let lastX = -1e9; xs.forEach((x, i) => { if ((xs.length <= 6 || i % Math.ceil(xs.length / 6) === 0) && X(x) - lastX >= 44) { lastX = X(x); s += '<text class="tick" x="' + X(x) + '" y="' + (H - m.b + 16) + '" text-anchor="middle">' + esc(xf(x)) + '</text>'; } });
-    o.lines.forEach((se, i) => { const c = se.color || PALETTE[i % PALETTE.length]; const ps = se.points.slice().sort((a, b) => a.x - b.x); if (ps.length > 1) s += '<polyline class="line" stroke="' + c + '" points="' + ps.map((p) => X(p.x) + ',' + Y(p.y)).join(' ') + '"/>'; for (const p of ps) s += '<circle cx="' + X(p.x) + '" cy="' + Y(p.y) + '" r="4" fill="' + c + '"><title>' + esc(se.label + ' \u00b7 ' + xf(p.x) + ': ' + yf(p.y)) + '</title></circle>'; });
+    sets.forEach((se, i) => { const c = se.color || PALETTE[i % PALETTE.length]; const ps = se.points.slice().sort((a, b) => a.x - b.x); if (ps.length > 1) s += '<polyline class="line" stroke="' + c + '" points="' + ps.map((p) => X(p.x) + ',' + Y(p.y)).join(' ') + '"/>'; for (const p of ps) s += '<circle cx="' + X(p.x) + '" cy="' + Y(p.y) + '" r="4" fill="' + c + '"><title>' + esc(se.label + ' \u00b7 ' + xf(p.x) + ': ' + yf(p.y)) + '</title></circle>'; });
     return s + '<text class="axis" x="' + ((m.l + W - m.r) / 2) + '" y="' + (H - 4) + '" text-anchor="middle">' + esc(o.xLabel || '') + '</text></svg>';
   }
   function legend(items) { return '<div class="legend">' + items.map((it, i) => '<span><i style="background:' + (it.color || PALETTE[i % PALETTE.length]) + '"></i>' + esc(it.label) + '</span>').join('') + '</div>'; }

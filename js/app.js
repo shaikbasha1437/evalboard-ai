@@ -467,7 +467,7 @@
   function effectiveCfg(cfg, ds) { return DEMO.effective(clone(cfg), ds); }
   function estimate(ds, cfgs) {
     const cases = formCases(ds); let worst = 0; let unknown = [];
-    for (const cfg of cfgs) { const e = effectiveCfg(cfg, ds); for (const c of cases) { const p = R.buildPrompt(e, c); worst += P.worstCase(EB.tokens.estimate(p.system + '\n' + p.user) + 8, e.maxTokens, e.model, state.prices); } if (cfg.provider !== 'mock' && !P.lookup(cfg.model, state.prices)) unknown.push(cfg.label); }
+    for (const cfg of cfgs) { const e = effectiveCfg(cfg, ds); for (const c of cases) { const p = R.buildPrompt(e, c); worst += P.worstCase(Math.ceil(EB.tokens.estimate(p.system + '\n' + p.user) * 1.2) + 16, e.maxTokens, e.model, state.prices); } if (cfg.provider !== 'mock' && !P.lookup(cfg.model, state.prices)) unknown.push(cfg.label); }
     return { calls: cases.length * cfgs.length, worst, unknown };
   }
   function renderRun(el) {

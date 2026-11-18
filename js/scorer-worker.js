@@ -15,5 +15,5 @@ self.onmessage = (ev) => {
     if (code !== compiledSrc) { compiled = new Function('helpers', self.EB.custom.wrap(code))(helpers); compiledSrc = code; } // eslint-disable-line no-new-func
     if (typeof compiled !== 'function') throw new Error('Define a function named score.');
     Promise.resolve(compiled(Object.freeze(payload))).then((r) => self.postMessage({ id, ok: true, result: self.EB.custom.normalizeResult(r, threshold) }), (e) => self.postMessage({ id, ok: false, error: String((e && e.message) || e) }));
-  } catch (e) { self.postMessage({ id, ok: false, error: String((e && e.message) || e) }); }
+  } catch (e) { self.postMessage({ id, ok: false, error: e && e.name && e.message ? e.name + ': ' + e.message : String(e) }); } // include the name: Firefox's syntax messages don't say "syntax"
 };
