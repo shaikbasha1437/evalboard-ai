@@ -23,11 +23,11 @@ The unit tests cover:
 - **Provider module.** Mocked `fetch`, including SSE streaming and time to first token.
 - **CLI and Action.** Pass, regression fail, threshold fail and job summary. A missing key stops before sending. A live run puts the key only in the request header and never in the report.
 - **Sandbox.** The `node:vm` custom scorer times out.
-- **Hygiene.** No numbering, visa wording, real-looking keys or non-`.example` emails in public files.
+- **Hygiene.** No numbering labels, banned wording, real-looking keys or non-`.example` emails in public files.
 
 The browser run covers:
 
-- **Load.** The eyebrow, the simulated-results banner, 8 runs, the leaderboard, the Pareto frontier on both charts, and no numbering or visa words.
+- **Load.** The eyebrow, the simulated-results banner, 8 runs, the leaderboard, the Pareto frontier on both charts, and none of the banned wording.
 - **Modals.** Help, export, settings, case, config, import, versions, split, scorers, default prompt, case edit and custom scorer each close via X, Cancel, Esc, a backdrop click and browser Back.
 - **Unsaved edits.** A discard prompt on Esc and on Back; the modal stays open on "No".
 - **Required fields.** An empty required field shows an error on Save, and Cancel still closes the modal.
